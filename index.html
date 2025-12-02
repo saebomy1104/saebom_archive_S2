@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>새봄의 디자인 아카이브 🍓</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ✨ 폰트 로드 (Paperlogy) ✨ */
+        @font-face {
+            font-family: 'Paperlogy-8ExtraBold';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
+            font-weight: 800; font-style: normal;
+        }
+        @font-face {
+            font-family: 'Paperlogy-6SemiBold';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2');
+            font-weight: 600; font-style: normal;
+        }
+
+        /* --- 🎨 컬러 변수 --- */
+        :root {
+            /* [Day Mode] */
+            --bg-grad-1: #ffc2d4;        
+            --bg-grad-2: #ffe3e8;     
+            --bg-grad-3: #fffdf2;     
+            --point-color: #ff7e98; 
+            --shadow-color: rgba(255, 126, 152, 0.3); 
+            --text-color: #594a4e;    
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --border-color: #fff;
+        }
+
+        /* [Night Mode] */
+        body.dark-mode {
+            --bg-grad-1: #2d1b2e;        
+            --bg-grad-2: #462b35;     
+            --bg-grad-3: #1a1a1a;     
+            --point-color: #ff9fb6; 
+            --shadow-color: rgba(0, 0, 0, 0.5); 
+            --text-color: #f0e6ea;    
+            --card-bg: rgba(50, 50, 50, 0.85);
+            --nav-bg: rgba(0, 0, 0, 0.7);
+            --border-color: #555;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        /* 핑크 스크롤바 */
+        ::-webkit-scrollbar { width: 14px; }
+        ::-webkit-scrollbar-track { background: var(--bg-grad-2); }
+        ::-webkit-scrollbar-thumb { background-color: var(--point-color); border-radius: 10px; border: 3px solid var(--bg-grad-2); }
+        ::-webkit-scrollbar-thumb:hover { background-color: #ff5e7d; }
+
+        body {
+            font-family: 'Paperlogy-6SemiBold', sans-serif;
+            background: linear-gradient(180deg, var(--bg-grad-1) 0%, var(--bg-grad-2) 40%, var(--bg-grad-3) 100%);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        input, button, textarea, select { font-family: 'Paperlogy-6SemiBold', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Paperlogy-8ExtraBold', sans-serif; }
+
+        /* 배경 도트 패턴 */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(rgba(255,255,255,0.3) 2px, transparent 2.5px),
+                radial-gradient(rgba(255,255,255,0.3) 2px, transparent 2.5px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            opacity: 0.5; pointer-events: none; z-index: -1;
+        }
+
+        /* 우측 상단 플레이어 */
+        #fixed-player {
+            position: fixed; top: 30px; right: 30px; z-index: 999;
+            background: var(--nav-bg); padding: 8px 15px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            border: 2px solid var(--point-color);
+            display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.3s;
+        }
+        #fixed-player:hover { transform: scale(1.05); }
+        .lp-icon {
+            font-size: 2rem; color: #333;
+            animation: spin 3s linear infinite; animation-play-state: paused;
+            background: radial-gradient(circle, #fff 10%, #333 11%, #333 40%, var(--point-color) 41%, var(--point-color) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+        .lp-icon.playing { animation-play-state: running; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .music-text { font-family: 'Paperlogy-8ExtraBold'; font-size: 0.9rem; color: var(--point-color); margin-right: 5px; white-space: nowrap; }
+
+        /* --- ✨ 헤더 & 타이틀 (수정됨: 춤추는 폰트) ✨ --- */
+        header {
+            text-align: center; height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .hero-title {
+            font-size: 7rem; /* ✨ 기존 3.5rem에서 7rem으로 2배 확대! */
+            margin-bottom: 30px;
+            color: #fff;
+            text-shadow: 3px 3px 0px var(--point-color);
+            line-height: 1.2; /* 글자가 커져서 줄 간격 살짝 좁힘 */
+            cursor: default;
+        }
+
+        /* 글자 하나하나에 적용될 스타일 */
+        .hero-title span {
+            display: inline-block;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 통통 튀는 효과 */
+            cursor: pointer;
+        }
+
+        /* ✨ [수정됨] 호버 시 효과 (일반 글자: 조새봄 제외) ✨ */
+        .hero-title span:not(.name-char):hover {
+            transform: translateY(-20px) rotate(10deg) scale(1.2); /* 위로 붕 뜨면서 회전 */
+            color: #ff5e7d; /* ✨ 더 진하고 쨍한 핑크로 변경! */
+            text-shadow: 3px 3px 0px #ffc2d4; /* 그림자는 연한 핑크로 대비를 줌 */
+        }
+
+        /* ✨ '조새봄' 전용 스타일 (수정됨: 간격 삭제 & 테두리 3px & 더 진한 색) ✨ */
+        .name-char {
+            color: #ffe3e8; /* 연한 핑크 채우기 */
+            -webkit-text-stroke: 3px #ff5e7d; /* 더 진한 핑크 테두리! */
+            text-shadow: 3px 3px 0px rgba(255, 94, 125, 0.3); /* 더 진한 그림자 */
+            font-weight: 900; /* 통통하게 */
+            margin: 0; /* 간격 제거해서 다른 글자와 동일하게! */
+            paint-order: stroke fill; /* 테두리가 글자를 갉아먹지 않게 */
+        }
+
+        /* '조새봄' 호버 시 효과 (수정됨: 더 진한 색) */
+        .name-char:hover {
+            color: #ff5e7d !important; /* 더 진한 핑크로 변경! */
+            -webkit-text-stroke: 0px transparent !important; /* 테두리 없애고 */
+            text-shadow: 0 0 15px #ff7e98, 0 0 30px #ff5e7d !important; /* 더 뽀샤시하고 진한 네온 글로우 효과 */
+            transform: translateY(-20px) rotate(-10deg) scale(1.3) !important; /* 반대 방향으로 갸우뚱 */
+        }
+
+        .hero-title .highlight {
+            color: #fff; 
+        }
+
+        .scroll-down { margin-top: 50px; font-size: 2rem; animation: bounce 2s infinite; opacity: 0.8; color: #fff; text-shadow: 0 2px 5px var(--point-color); }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+        section { 
+            margin-bottom: 150px; 
+            /* 스크롤 오프셋 보정 */
+            scroll-margin-top: 80px; 
+        }
+
+        .section-title {
+            text-align: center; font-size: 2rem; color: white;
+            margin-bottom: 50px; background: var(--point-color);
+            display: inline-block; padding: 5px 30px; border-radius: 50px;
+            position: relative; left: 50%; transform: translateX(-50%);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        /* 우측 스크롤 내비게이터 */
+        .right-nav {
+            position: fixed; top: 50%; right: 30px; transform: translateY(-50%);
+            display: flex; flex-direction: column; align-items: center; z-index: 100;
+        }
+        .right-nav::before {
+            content: ''; position: absolute; top: 10px; bottom: 10px; left: 50%;
+            width: 2px; background-color: rgba(255, 255, 255, 0.5);
+            transform: translateX(-50%); z-index: -1;
+        }
+        .nav-dot {
+            display: block; width: 14px; height: 14px; background-color: #fff;
+            border-radius: 50%; margin: 8px 0; cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1); position: relative;
+        }
+        .nav-dot::after {
+            content: attr(data-label); position: absolute; right: 25px; top: 50%;
+            transform: translateY(-50%); background: var(--point-color); color: white;
+            padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; white-space: nowrap;
+            opacity: 0; visibility: hidden; transition: 0.3s; font-family: 'Paperlogy-6SemiBold';
+        }
+        .nav-dot:hover::after { opacity: 1; visibility: visible; }
+        .nav-dot.active {
+            background-color: var(--point-color); transform: scale(1.3);
+            box-shadow: 0 0 10px var(--point-color); border: 2px solid white;
+        }
+
+        /* 공통 카드 스타일 */
+        .card-style {
+            background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 3px solid var(--border-color); border-radius: 20px; padding: 30px;
+            box-shadow: 0 15px 35px var(--shadow-color); position: relative; overflow: hidden;
+        }
+
+        /* 프로필 섹션 */
+        .profile-card {
+            background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 3px solid var(--border-color); border-radius: 20px; padding: 40px;
+            box-shadow: 0 15px 35px var(--shadow-color); position: relative; overflow: hidden;
+        }
+        .profile-content { display: flex; gap: 40px; align-items: center; margin-bottom: 40px; }
+        .profile-img-box {
+            flex-shrink: 0; width: 280px; height: 280px; border-radius: 20px; overflow: hidden;
+            border: 6px solid var(--border-color); box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        .profile-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-info h3 { font-size: 2.5rem; color: var(--text-color); margin-bottom: 10px; }
+        .profile-info .role { color: var(--point-color); font-weight: bold; margin-bottom: 20px; display: block; font-size: 1.1rem; }
+        .profile-desc { margin-bottom: 30px; line-height: 1.8; }
+        .info-list { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .info-list li { background: var(--nav-bg); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; color: var(--text-color); border: 1px solid var(--point-color); }
+
+        /* 페르소나 */
+        .persona-box { 
+            background: var(--nav-bg); padding: 20px; border-radius: 15px; 
+            border-left: 4px solid var(--point-color); margin-bottom: 40px; 
+        }
+        .persona-quote { font-style: italic; color: #888; margin-bottom: 15px; font-size: 0.95rem; }
+        .stat-bar { margin-bottom: 10px; }
+        .stat-label { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; margin-bottom: 3px; color: var(--text-color); }
+        .bar-bg { width: 100%; height: 8px; background: #eee; border-radius: 10px; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--point-color); border-radius: 10px; }
+
+        /* 비타민 & 버그 리포트 */
+        .feedback-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .feedback-card {
+            border-radius: 15px; padding: 25px; position: relative;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+        }
+        .vitamin { background: #fff9c4; border: 2px solid #fbc02d; }
+        .bug { background: #e3f2fd; border: 2px solid #64b5f6; }
+        .fb-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+        .fb-title { font-family: 'Paperlogy-8ExtraBold'; font-size: 1.2rem; margin-bottom: 10px; color: #333; }
+        .fb-list { list-style: none; padding-left: 5px; }
+        .fb-list li { margin-bottom: 8px; position: relative; padding-left: 20px; font-size: 0.95rem; color: #555; }
+        .vitamin li::before { content: '💊'; position: absolute; left: 0; }
+        .bug li::before { content: '🐞'; position: absolute; left: 0; }
+        .fix-tag { font-size: 0.7rem; background: #2ecc71; color: white; padding: 2px 5px; border-radius: 3px; margin-left: 5px; }
+
+        /* 스킬 박스 */
+        .skill-box { margin-top: 20px; padding-top: 30px; border-top: 2px dashed var(--point-color); }
+        .skill-title { font-family: 'Paperlogy-8ExtraBold'; font-size: 1.2rem; color: var(--point-color); margin-bottom: 15px; display: block; }
+        .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 15px; }
+        .skill-item {
+            background: var(--nav-bg); padding: 15px; border-radius: 15px; text-align: center;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.03); transition: 0.3s; border: 2px solid transparent;
+        }
+        .skill-item:hover { transform: translateY(-5px); border-color: var(--point-color); background: #fff0f5; box-shadow: 0 5px 15px var(--shadow-color); }
+        .skill-icon { font-size: 2rem; display: block; margin-bottom: 5px; }
+        .skill-name { font-size: 0.9rem; font-weight: bold; color: var(--text-color); }
+
+        /* 디자인 시스템 */
+        .system-container { display: flex; flex-direction: column; gap: 40px; }
+        .system-group h3 { 
+            font-size: 1.3rem; color: var(--point-color); margin-bottom: 15px; 
+            border-bottom: 2px dashed var(--point-color); padding-bottom: 5px; display: inline-block;
+        }
+        .color-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .color-chip {
+            height: 100px; border-radius: 15px; padding: 15px;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s;
+            color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .color-chip:hover { transform: translateY(-5px); }
+        .color-chip .hex { font-weight: bold; font-size: 1rem; }
+        .color-chip .name { font-size: 0.8rem; opacity: 0.9; }
+        .typo-box, .ui-box { background: var(--nav-bg); padding: 20px; border-radius: 15px; }
+        .ui-row { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+        .demo-btn {
+            padding: 8px 20px; border-radius: 30px; border: none; font-weight: bold; cursor: pointer;
+            background: #ffeff2; color: var(--point-color); border: 1px solid var(--point-color);
+            box-shadow: 0 3px 5px rgba(0,0,0,0.1); font-family: 'Paperlogy-6SemiBold';
+        }
+        .demo-btn.hover { background: var(--point-color); color: white; }
+
+        /* 타임라인 */
+        .timeline { position: relative; max-width: 800px; margin: 0 auto; }
+        .timeline::after {
+            content: ''; position: absolute; width: 4px; background-color: white;
+            top: 0; bottom: 0; left: 50%; margin-left: -2px; border-radius: 2px; z-index: 1;
+        }
+        .timeline-item { padding: 10px 40px; position: relative; width: 50%; z-index: 2; }
+        .left { left: 0; text-align: right; } .right { left: 50%; text-align: left; }
+        
+        .timeline-item::after {
+            content: '🍓'; position: absolute; width: 40px; height: 40px; background-color: white;
+            border: 3px solid var(--point-color); border-radius: 50%; z-index: 1;
+            display: flex; align-items: center; justify-content: center; font-size: 16px;
+            top: 20px;
+        }
+        .left::after { right: -20px; } 
+        .right::after { left: -20px; }
+
+        .content { padding: 20px; background: var(--nav-bg); border-radius: 15px; box-shadow: 0 5px 20px rgba(255, 126, 152, 0.15); border: 1px solid var(--point-color); }
+        .date { color: var(--point-color); font-weight: bold; display: block; margin-bottom: 5px; font-size: 0.95rem; }
+        .job-title { font-weight: bold; font-size: 1.1rem; color: var(--text-color); }
+        .company { font-size: 0.9rem; color: #888; display: block; margin-bottom: 5px; }
+
+        /* 갤러리 */
+        .category-group { margin-bottom: 80px; }
+        .category-header { 
+            font-size: 1.5rem; color: var(--point-color); 
+            margin-bottom: 20px; border-left: 6px solid var(--point-color);
+            padding-left: 15px; display: flex; align-items: center; gap: 10px; background: var(--nav-bg); border-radius: 0 10px 10px 0; padding: 10px 15px;
+        }
+        .sub-category-header {
+            font-size: 1.1rem; color: #8d7b7f; margin: 30px 0 15px 0;
+            display: inline-block; background: var(--nav-bg); padding: 5px 15px; border-radius: 20px; font-weight: bold; border: 1px solid var(--point-color);
+        }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; } 
+        .gallery-item {
+            display: block; text-decoration: none; color: inherit; background: var(--nav-bg);
+            border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .gallery-item:hover { transform: translateY(-5px); box-shadow: 0 10px 25px var(--shadow-color); }
+        .thumb-box { width: 100%; height: 140px; background-color: #fff5f7; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+        .thumb-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .gallery-item:hover .thumb-box img { transform: scale(1.1); }
+        .item-info { padding: 15px; text-align: center; }
+        .item-info h4 { font-size: 0.9rem; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-color); }
+        .tag-badge { display: inline-block; font-size: 0.7rem; background: #ffeff2; color: var(--point-color); padding: 2px 8px; border-radius: 4px; margin-top: 5px; font-weight: bold; }
+
+        /* Guild Chat */
+        .chat-box { 
+            background: #f1f2f6; 
+            padding: 20px; border-radius: 15px; border: 2px solid #e0e0e0; 
+        }
+        .chat-row { display: flex; gap: 10px; margin-bottom: 15px; align-items: flex-start; }
+        .chat-row.me { flex-direction: row-reverse; }
+        .chat-row.me > div { 
+            display: flex; flex-direction: column; align-items: flex-end; 
+        }
+        .chat-row.me .chat-bubble { 
+            background: var(--point-color); color: white; 
+            border-radius: 15px 0 15px 15px; 
+            margin-right: 10px; 
+        }
+
+        .chat-avatar {
+            width: 50px; height: 50px; 
+            background: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid var(--point-color); flex-shrink: 0;
+            font-size: 1.5rem; 
+            margin-right: 0; padding-bottom: 0; line-height: 1;
+        }
+        .chat-bubble {
+            background: white; padding: 10px 15px; border-radius: 0 15px 15px 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); max-width: 100%; font-size: 0.95rem; color: #555;
+        }
+        .chat-name { font-size: 0.75rem; color: #888; margin-bottom: 3px; display: block; }
+        .chat-row.me .chat-name { text-align: right; margin-right: 10px; }
+
+        /* FAQ */
+        .faq-container { max-width: 800px; margin: 0 auto; }
+        .faq-item {
+            background: var(--nav-bg); margin-bottom: 15px;
+            border-radius: 15px; overflow: hidden;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05); transition: 0.3s;
+        }
+        .faq-item:hover { transform: translateY(-3px); }
+        .faq-item input { display: none; }
+        .faq-question {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px 25px; cursor: pointer; font-weight: bold; color: var(--text-color);
+            font-family: 'Paperlogy-8ExtraBold'; font-size: 1.1rem;
+        }
+        .q-icon { color: var(--point-color); margin-right: 10px; font-size: 1.3rem; }
+        .arrow { transition: 0.3s; color: #bbb; }
+        .faq-answer {
+            max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;
+            background: rgba(255,255,255,0.5); color: #666; font-size: 0.95rem; line-height: 1.6;
+        }
+        .faq-answer p { padding: 25px; border-top: 1px dashed #ffe3e8; margin: 0; }
+        .faq-item input:checked ~ .faq-answer { max-height: 200px; }
+        .faq-item input:checked ~ .faq-question .arrow { transform: rotate(180deg); color: var(--point-color); }
+        .faq-item input:checked ~ .faq-question { color: var(--point-color); }
+
+        /* 방명록 */
+        .guestbook-box {
+            background: var(--card-bg); padding: 40px; border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow-color); border: 2px dashed var(--point-color);
+        }
+        .guest-form { display: flex; gap: 10px; margin-bottom: 30px; justify-content: center; flex-wrap: wrap; }
+        .guest-input { padding: 10px; border-radius: 10px; border: 1px solid #ddd; outline: none; }
+        .guest-btn { 
+            padding: 10px 20px; background: var(--point-color); color: white; border: none; border-radius: 10px; cursor: pointer; 
+            font-family: 'Paperlogy-8ExtraBold'; transition: 0.3s;
+        }
+        .guest-btn:hover { background: #ff5e7d; transform: scale(1.05); }
+        .paper-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .post-it {
+            width: 150px; height: 150px; background: #fff9c4; padding: 15px;
+            border-radius: 0 0 20px 0; box-shadow: 3px 3px 5px rgba(0,0,0,0.1);
+            font-family: 'Paperlogy-6SemiBold', sans-serif;
+            font-size: 0.95rem; line-height: 1.4; color: #444;
+            display: flex; flex-direction: column; justify-content: space-between;
+            animation: fadeIn 0.5s; transform: rotate(-2deg);
+        }
+        .post-it:nth-child(even) { background: #ffcdd2; transform: rotate(2deg); }
+        .post-it:nth-child(3n) { background: #c5cae9; transform: rotate(-1deg); }
+        .post-name { font-size: 0.8rem; text-align: right; color: #666; font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; } }
+
+        /* 컨택트 박스 */
+        .contact-box {
+            background: var(--nav-bg); max-width: 600px; margin: 0 auto;
+            padding: 70px 40px 40px 40px; 
+            border-radius: 20px; text-align: center; position: relative;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            border: 3px dashed var(--point-color);
+        }
+        .contact-box::before { 
+            content: '💌'; font-size: 3.5rem; 
+            position: absolute; top: -45px; left: 50%; transform: translateX(-50%); 
+            background: #fff; padding: 0 10px; border-radius: 50%; 
+            border: 3px dashed var(--point-color); 
+        }
+        .contact-links { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
+        .contact-btn {
+            display: flex; align-items: center; gap: 8px; padding: 10px 20px;
+            background: #ffeff2; color: var(--point-color); text-decoration: none;
+            border-radius: 30px; font-weight: bold; transition: 0.3s;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.1); border: 1px solid var(--point-color);
+        }
+        .contact-btn:hover { background: var(--point-color); color: white; transform: translateY(-3px); }
+
+        /* 취미 섹션 */
+        .hobby-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; }
+        .hobby-card {
+            background: var(--nav-bg); border-radius: 50%; width: 150px; height: 150px; margin: 0 auto;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 3px solid #ffe3e8; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: 0.3s; cursor: pointer; text-decoration: none; color: inherit;
+        }
+        .hobby-card:hover { transform: rotate(10deg) scale(1.1); border-color: var(--point-color); background: #fff0f5; }
+        .hobby-icon { font-size: 2.5rem; margin-bottom: 5px; }
+        .hobby-name { font-size: 0.9rem; font-weight: bold; color: var(--text-color); }
+
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 1s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        @media screen and (max-width: 768px) {
+            .profile-content { flex-direction: column; text-align: center; }
+            .profile-img-box { width: 200px; height: 200px; margin-bottom: 20px; }
+            .info-list { justify-content: center; }
+            .timeline::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .left { text-align: left; } .left::after { left: 15px; } .right { left: 0; }
+            .right-nav, #fixed-player { display: none; } /* 모바일 숨김 */
+            /* ✨ 모바일에서는 타이틀 폰트 크기 조정 ✨ */
+            .hero-title { font-size: 3.5rem; }
+        }
+
+        .floating-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+        .floater { position: absolute; font-size: 2.5rem; opacity: 0.6; animation: floatUp 15s linear infinite; bottom: -50px; }
+        @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
+        .f1 { left: 10%; animation-duration: 15s; font-size: 2rem; } .f2 { left: 30%; animation-duration: 20s; animation-delay: -5s; font-size: 3rem; }
+        .f3 { left: 50%; animation-duration: 18s; animation-delay: -10s; } .f4 { left: 70%; animation-duration: 22s; font-size: 2.5rem; } .f5 { left: 90%; animation-duration: 16s; }
+
+        /* 맨 위로 가기 버튼 */
+        #scrollTopBtn {
+            display: none; position: fixed; bottom: 30px; right: 30px; z-index: 99;
+            border: none; outline: none; background-color: var(--point-color);
+            color: white; cursor: pointer; padding: 15px; border-radius: 50%;
+            font-size: 1.5rem; box-shadow: 0 5px 15px var(--shadow-color);
+            transition: 0.3s; width: 60px; height: 60px;
+        }
+        #scrollTopBtn:hover { background-color: #ff5e7d; transform: translateY(-5px); }
+
+        /* 흰색 하트 이펙트 */
+        .sparkle {
+            position: fixed; color: white; font-size: 20px; pointer-events: none; z-index: 9999;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff; animation: sparkleAnim 1.5s linear forwards;
+        }
+        @keyframes sparkleAnim {
+            0% { transform: scale(0.5) translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: scale(1.2) translateY(-40px) rotate(20deg); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="floating-bg">
+        <div class="floater f1">🐰</div>
+        <div class="floater f2">🍰</div>
+        <div class="floater f3">🍓</div>
+        <div class="floater f4">🍰</div>
+        <div class="floater f5">🐰</div>
+    </div>
+
+    <div id="fixed-player">
+        <i class="fas fa-compact-disc lp-icon"></i>
+        <span class="music-text">Click to Play 🎵</span>
+        <audio id="bgm" loop>
+            <source src="music/bgm.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <div class="right-nav">
+        <a href="#about" class="nav-dot" data-label="About"></a>
+        <a href="#vitamin" class="nav-dot" data-label="Vitamin"></a>
+        <a href="#system" class="nav-dot" data-label="System"></a>
+        <a href="#journey" class="nav-dot" data-label="Journey"></a>
+        <a href="#works" class="nav-dot" data-label="Works"></a>
+        <a href="#hobby" class="nav-dot" data-label="Hobby"></a>
+        <a href="#chat" class="nav-dot" data-label="Chat"></a>
+        <a href="#guestbook" class="nav-dot" data-label="Guest"></a>
+        <a href="#faq" class="nav-dot" data-label="FAQ"></a>
+        <a href="#contact" class="nav-dot" data-label="Contact"></a>
+    </div>
+
+    <!-- ✨ [수정됨] 타이틀 부분 ✨ -->
+    <header>
+        <h1 class="hero-title">
+            <span>안</span><span>녕</span><span>하</span><span>세</span><span>요</span><span>!</span><br>
+            <span>웹</span> <span>디</span><span>자</span><span>이</span><span>너</span><br>
+            <span class="name-char">조</span><span class="name-char">새</span><span class="name-char">봄</span><span>입</span><span>니</span><span>다</span><span>.</span>
+        </h1>
+        <p style="color: #fff; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">
+            작업 아카이브를 찾아주셔서 감사합니다 ( --) ( __)
+        </p>
+        <div class="scroll-down">👇</div>
+    </header>
+
+    <div class="container">
+
+        <section id="about" class="reveal">
+            <h2 class="section-title">🐰 About Me</h2>
+            <div class="profile-card">
+                <div class="profile-content">
+                    <div class="profile-img-box">
+                        <img src="https://images.unsplash.com/photo-1585110396067-4e4baa60771f?q=80&w=1000&auto=format&fit=crop" alt="토끼 프로필">
+                    </div>
+                    <div class="profile-info">
+                        <h3>조새봄 (Saebom Jo)</h3>
+                        <span class="role">Web Designer</span>
+                        <p class="profile-desc">
+                            안녕하세요 병아리 디자이너 조새봄 입니다!<br>
+                            막 태어난 병아리 처럼 모든 것이 서툴지만 따뜻한 싱그러움을 자아내는 모습이<br>
+                            저와 비슷하다 느껴 저를 병아리 디자이너라 소개하게 되었습니다.<br>
+                            아직 배울 것도 많고 부족한 점도 많지만 항상 배워 나가며 노력 하겠습니다!💖
+                        </p>
+                        <ul class="info-list">
+                            <li><span>🎂</span> 96.11.04</li>
+                            <li><span>🧠</span> ISFJ</li>
+                            <li><span>📍</span> Seoul</li>
+                            <li><span>💌</span> Loves Pink</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="persona-box">
+                    <p class="persona-quote">"예쁜 것도 중요하지만, 사용자가 편해야 진짜 좋은 디자인이죠!"</p>
+                    <div class="stat-bar">
+                        <div class="stat-label"><span>핑크 사랑 (Pink Lover)</span><span>100%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 100%;"></div></div>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-label"><span>꼼꼼함 (Detail)</span><span>95%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 95%;"></div></div>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-label"><span>코딩 호기심 (Tech)</span><span>80%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: 80%;"></div></div>
+                    </div>
+                </div>
+
+                <div class="skill-box">
+                    <span class="skill-title">🛠️ My Tools</span>
+                    <div class="skill-grid">
+                        <div class="skill-item"><span class="skill-icon">🎨</span><span class="skill-name">Photoshop</span></div>
+                        <div class="skill-item"><span class="skill-icon">✒️</span><span class="skill-name">Illustrator</span></div>
+                        <div class="skill-item"><span class="skill-icon">🌈</span><span class="skill-name">Figma</span></div>
+                        <div class="skill-item"><span class="skill-icon">💻</span><span class="skill-name">HTML/CSS/JS</span></div>
+                        <div class="skill-item"><span class="skill-icon">✨</span><span class="skill-name">AI</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vitamin" class="reveal">
+            <h2 class="section-title">💊 Vitamin & Bug Report</h2>
+            <div class="feedback-grid">
+                <div class="feedback-card vitamin">
+                    <span class="fb-icon">💊</span>
+                    <h3 class="fb-title">Vitamin (Strength)</h3>
+                    <ul class="fb-list">
+                        <li>"손이 빠르고 마감이 정확해요!"</li>
+                        <li>"동료들과 소통이 부드러워서 좋아요."</li>
+                        <li>"오타나 픽셀 나간 걸 정말 잘 찾아요."</li>
+                    </ul>
+                </div>
+                <div class="feedback-card bug">
+                    <span class="fb-icon">🐞</span>
+                    <h3 class="fb-title">Bug Fix (Growth)</h3>
+                    <ul class="fb-list">
+                        <li>너무 신중해서 결정이 느릴 때가 있음 <span class="fix-tag">Fixed</span><br><small>👉 타이머 설정하고 결정하는 습관으로 해결!</small></li>
+                        <li>코드에 대한 두려움 <span class="fix-tag">Solving..</span><br><small>👉 매일 코이와 함께 HTML/CSS 공부 중!</small></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="system" class="reveal">
+            <h2 class="section-title">🎨 My Design System</h2>
+            <div class="card-style">
+                <div class="system-container">
+                    <div class="system-group">
+                        <h3>Color Palette</h3>
+                        <div class="color-grid">
+                            <div class="color-chip" style="background: #ffc2d4;"><span class="hex">#FFC2D4</span><span class="name">Strawberry Milk</span></div>
+                            <div class="color-chip" style="background: #ff7e98;"><span class="hex">#FF7E98</span><span class="name">Berry Point</span></div>
+                            <div class="color-chip" style="background: #fffdf2; border: 1px solid #eee;"><span class="hex" style="color:#594a4e">#FFFDF2</span><span class="name" style="color:#594a4e">Vanilla Cream</span></div>
+                            <div class="color-chip" style="background: #594a4e;"><span class="hex">#594A4E</span><span class="name">Choco Text</span></div>
+                        </div>
+                    </div>
+                    <div class="system-group">
+                        <h3>Typography & UI (수정됨)</h3>
+                        <div class="ui-box">
+                            <div class="ui-row">
+                                <span class="tag-badge">#Title: Paperlogy ExtraBold</span>
+                                <span class="tag-badge">#Body: Paperlogy SemiBold</span>
+                            </div>
+                            <div class="ui-row">
+                                <button class="demo-btn">Default Button</button>
+                                <button class="demo-btn hover">Hover State</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="journey" class="reveal">
+            <h2 class="section-title">✨ My Journey</h2>
+            <div class="timeline">
+                <div class="timeline-item left reveal">
+                    <div class="content">
+                        <span class="date">2020. 07 - 2022. 10</span>
+                        <h3 class="job-title">폼폼레시피 🎨</h3>
+                        <span class="company">개인사업 (Freelancer)</span>
+                        <p>온라인 그림 제작 및 굿즈 판매</p>
+                    </div>
+                </div>
+                <div class="timeline-item right reveal">
+                    <div class="content">
+                        <span class="date">2023. 02 - 2024. 03</span>
+                        <h3 class="job-title">(주)마리앙 입사</h3>
+                        <span class="company">웹디자이너 어시스트 (Assist)</span>
+                        <p>자사몰 운영 보조 및 디자인 서포트</p>
+                    </div>
+                </div>
+                <div class="timeline-item left reveal">
+                    <div class="content">
+                        <span class="date">2024. 05 - 2025. 07</span>
+                        <h3 class="job-title">(주)제이스타일 입사</h3>
+                        <span class="company">웹디자이너 (Web Designer)</span>
+                        <p>상세페이지 디자인 및 이벤트 배너 제작</p>
+                    </div>
+                </div>
+                <div class="timeline-item right reveal">
+                    <div class="content">
+                        <span class="date">2025. 09 - Current</span>
+                        <h3 class="job-title">(주)아이엔에프아이엑스 입사</h3>
+                        <span class="company">웹디자이너 (Web Designer)</span>
+                        <p>웹 벤더 실무 프로젝트 및 유지보수</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="works" class="reveal">
+            <h2 class="section-title">📂 Works Gallery</h2>
+            
+            <div class="category-group">
+                <h3 class="category-header">🏢 (주)아이엔에프아이엑스</h3>
+                <div class="gallery-grid">
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 01</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 02</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 03</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 04</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 05</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 06</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 07</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 08</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 09</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 10</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 11</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 12</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 13</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 14</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 15</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 16</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 17</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 18</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 19</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 20</h4></div></a>
+                </div>
+            </div>
+
+            <div class="category-group">
+                <h3 class="category-header">👗 (주)제이스타일</h3>
+                
+                <span class="sub-category-header">🇯🇵 Japan</span>
+                <div class="gallery-grid">
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 01</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 02</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 03</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 04</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 05</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 06</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 07</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 08</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 09</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 10</h4></div></a>
+                </div>
+
+                <span class="sub-category-header">🇰🇷 Korea</span>
+                <div class="gallery-grid">
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 01</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 02</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 03</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 04</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 05</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 06</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 07</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 08</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 09</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 10</h4></div></a>
+                </div>
+
+                <span class="sub-category-header">🇺🇸 USA / Global (EN)</span>
+                <div class="gallery-grid">
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 01</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 02</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 03</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 04</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 05</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 06</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 07</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 08</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 09</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 10</h4></div></a>
+                </div>
+            </div>
+
+            <div class="category-group">
+                <h3 class="category-header">🎀 (주)마리앙</h3>
+                <div class="gallery-grid">
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👠</div><div class="item-info"><h4>마리앙 배너 01</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👠</div><div class="item-info"><h4>마리앙 팝업 02</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👠</div><div class="item-info"><h4>마리앙 상세 03</h4></div></a>
+                </div>
+            </div>
+
+            <div class="category-group">
+                <h3 class="category-header">🎨 폼폼레시피</h3>
+                <div class="gallery-grid">
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">🖼️</div><div class="item-info"><h4>개인작 01</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">🖼️</div><div class="item-info"><h4>굿즈 디자인 02</h4></div></a>
+                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">🖼️</div><div class="item-info"><h4>커미션 03</h4></div></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="hobby" class="reveal">
+            <h2 class="section-title">🎮 My Hobbies</h2>
+            <div class="hobby-grid">
+                <a href="#" target="_blank" class="hobby-card"><span class="hobby-icon">🎮</span><span class="hobby-name">Game</span></a>
+                <a href="#" target="_blank" class="hobby-card"><span class="hobby-icon">🛍️</span><span class="hobby-name">Shopping</span></a>
+                <a href="#" target="_blank" class="hobby-card"><span class="hobby-icon">🐰</span><span class="hobby-name">Collecting</span></a>
+                <a href="#" target="_blank" class="hobby-card"><span class="hobby-icon">👗</span><span class="hobby-name">Fashion</span></a>
+                <a href="#" target="_blank" class="hobby-card"><span class="hobby-icon">📺</span><span class="hobby-name">Animation</span></a>
+            </div>
+        </section>
+
+        <section id="chat" class="reveal">
+            <h2 class="section-title">💬 Guild Chat</h2>
+            <div class="card-style">
+                <div class="chat-box">
+                    <div class="chat-row">
+                        <div class="chat-avatar">👩‍💻</div>
+                        <div>
+                            <span class="chat-name">개발자 김코딩</span>
+                            <div class="chat-bubble">새봄님은 디자인 넘기실 때 가이드가 확실해서 작업하기 너무 편해요! 최고 👍</div>
+                        </div>
+                    </div>
+                    <div class="chat-row me">
+                        <div class="chat-avatar">🐰</div>
+                        <div>
+                            <span class="chat-name">새봄</span>
+                            <div class="chat-bubble">앗 감사합니다! 개발하기 편하게 레이어 정리 더 신경 쓸게요! ㅎㅎ</div>
+                        </div>
+                    </div>
+                    <div class="chat-row">
+                        <div class="chat-avatar">🎨</div>
+                        <div>
+                            <span class="chat-name">사수 박디자</span>
+                            <div class="chat-bubble">새봄님은 손이 진짜 빨라요. 어제 그 시안 벌써 다 했어요? 퀄리티도 좋네...😲</div>
+                        </div>
+                    </div>
+                    <div class="chat-row">
+                        <div class="chat-avatar">☕</div>
+                        <div>
+                            <span class="chat-name">기획자 이기획</span>
+                            <div class="chat-bubble">오타 찾아내는 눈썰미가 장난 아니세요 ㅋㅋ 인간 맞춤법 검사기 인정합니다!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="guestbook" class="reveal">
+            <h2 class="section-title">📮 Rolling Paper</h2>
+            <div class="guestbook-box">
+                <div class="guest-form">
+                    <input type="text" id="g-name" placeholder="닉네임" class="guest-input" style="width:100px;">
+                    <input type="text" id="g-msg" placeholder="응원 한마디 남겨주세요!" class="guest-input" style="flex:1;">
+                    <button class="guest-btn" onclick="addPost()">남기기</button>
+                </div>
+                <div class="paper-grid" id="paper-grid">
+                    <div class="post-it">새봄님 포트폴리오 너무 예뻐요! 🍓<span class="post-name">- 코이 -</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="reveal">
+            <h2 class="section-title">💬 Q&A</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <input type="checkbox" id="faq1">
+                    <label class="faq-question" for="faq1">
+                        <span class="q-icon">Q.</span> 어떤 디자이너가 되고 싶나요? <i class="fas fa-chevron-down arrow"></i>
+                    </label>
+                    <div class="faq-answer"><p>사용자에게 '기분 좋은 경험'을 선물하는 디자이너가 되고 싶습니다. 단순한 아름다움을 넘어 머무르고 싶은 따뜻한 디지털 공간을 만들겠습니다! 🏡💖</p></div>
+                </div>
+                <div class="faq-item">
+                    <input type="checkbox" id="faq2">
+                    <label class="faq-question" for="faq2">
+                        <span class="q-icon">Q.</span> 코딩도 가능한가요? <i class="fas fa-chevron-down arrow"></i>
+                    </label>
+                    <div class="faq-answer"><p>네! HTML, CSS, 기초 JS를 다룰 수 있습니다. 디자인을 웹 언어로 이해하여 개발자와 원활히 소통하고, 제 디자인을 웹상에 구현할 수 있습니다. 💻✨</p></div>
+                </div>
+                <div class="faq-item">
+                    <input type="checkbox" id="faq3">
+                    <label class="faq-question" for="faq3">
+                        <span class="q-icon">Q.</span> 가장 좋아하는 디자인 스타일은? <i class="fas fa-chevron-down arrow"></i>
+                    </label>
+                    <div class="faq-answer"><p>키치(Kitsch)하고 몽글몽글한 감성을 가장 좋아합니다! 🍓 하지만 실무에서는 브랜드에 맞춰 깔끔하고 직관적인 UI를 설계하는 것도 자신 있습니다.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="reveal">
+            <h2 class="section-title">💌 Let's Connect</h2>
+            <div class="contact-box">
+                <p>저의 마법 같은 디자인이 마음에 드셨나요?<br>언제든 편하게 연락 주세요! 💖</p>
+                <div class="contact-links">
+                    <a href="mailto:saebomy961104@naver.com" class="contact-btn"><i class="fas fa-envelope"></i> Email</a>
+                    <a href="#" class="contact-btn"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="#" class="contact-btn"><i class="fas fa-comment"></i> KakaoTalk</a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <button onclick="topFunction()" id="scrollTopBtn" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <footer>
+        <p>Copyright 2025. Saebom Jo. All rights reserved. 💖</p>
+    </footer>
+
+    <script>
+        // ✨ (삭제됨) 타이핑 효과 JS 제거하고 CSS hover 효과로 대체함 ✨
+
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        function scrollFunction() {
+            var mybutton = document.getElementById("scrollTopBtn");
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        function topFunction() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            if(Math.random() < 0.4) { 
+                var sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                sparkle.innerHTML = '<i class="fas fa-heart"></i>'; 
+                sparkle.style.left = (e.clientX - 10) + 'px';
+                sparkle.style.top = (e.clientY - 10) + 'px';
+                var size = Math.random() * 15 + 10;
+                sparkle.style.fontSize = size + 'px';
+                document.body.appendChild(sparkle);
+                setTimeout(function() { sparkle.remove(); }, 1500);
+            }
+        });
+
+        // ✨ 뮤직 플레이어 ✨
+        const bgm = document.getElementById('bgm');
+        const playerBtn = document.getElementById('fixed-player');
+        const lpIcon = document.querySelector('.lp-icon');
+        const musicText = document.querySelector('.music-text');
+
+        playerBtn.addEventListener('click', () => {
+            if (bgm.paused) {
+                bgm.play();
+                lpIcon.classList.add('playing');
+                musicText.textContent = "Playing.. 🎶";
+            } else {
+                bgm.pause();
+                lpIcon.classList.remove('playing');
+                musicText.textContent = "Click to Play 🎵";
+            }
+        });
+
+        // ✨ 방명록 기능 ✨
+        function addPost() {
+            const name = document.getElementById('g-name').value;
+            const msg = document.getElementById('g-msg').value;
+            if(name && msg) {
+                const grid = document.getElementById('paper-grid');
+                const post = document.createElement('div');
+                post.className = 'post-it';
+                post.innerHTML = `${msg}<span class="post-name">- ${name} -</span>`;
+                grid.appendChild(post);
+                document.getElementById('g-name').value = '';
+                document.getElementById('g-msg').value = '';
+            } else {
+                alert("닉네임과 메시지를 모두 입력해주세요! 🍓");
+            }
+        }
+
+        function updateNav() {
+            const sections = document.querySelectorAll('section');
+            const navDots = document.querySelectorAll('.nav-dot');
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 300) { 
+                    current = section.getAttribute('id');
+                }
+            });
+            navDots.forEach(dot => {
+                dot.classList.remove('active');
+                if (dot.getAttribute('href').includes(current)) {
+                    dot.classList.add('active');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // type(); // 삭제됨
+            window.addEventListener("scroll", function() {
+                reveal();
+                scrollFunction();
+                updateNav();
+            });
+            reveal();
+        });
+    </script>
+</body>
+</html>
