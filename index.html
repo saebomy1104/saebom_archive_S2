@@ -22,28 +22,15 @@
         /* --- 🎨 컬러 변수 --- */
         :root {
             /* [Day Mode] */
-            --bg-grad-1: #ffc2d4;       
-            --bg-grad-2: #ffe3e8;    
-            --bg-grad-3: #fffdf2;    
+            --bg-grad-1: #ffc2d4;        
+            --bg-grad-2: #ffe3e8;     
+            --bg-grad-3: #fffdf2;     
             --point-color: #ff7e98; 
             --shadow-color: rgba(255, 126, 152, 0.3); 
-            --text-color: #594a4e;   
+            --text-color: #594a4e;    
             --card-bg: rgba(255, 255, 255, 0.85);
             --nav-bg: rgba(255, 255, 255, 0.9);
             --border-color: #fff;
-        }
-
-        /* [Night Mode] */
-        body.dark-mode {
-            --bg-grad-1: #2d1b2e;       
-            --bg-grad-2: #462b35;    
-            --bg-grad-3: #1a1a1a;    
-            --point-color: #ff9fb6; 
-            --shadow-color: rgba(0, 0, 0, 0.5); 
-            --text-color: #f0e6ea;   
-            --card-bg: rgba(50, 50, 50, 0.85);
-            --nav-bg: rgba(0, 0, 0, 0.7);
-            --border-color: #555;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
@@ -79,30 +66,6 @@
             opacity: 0.5; pointer-events: none; z-index: -1;
         }
 
-        /* 테마 스위치 */
-        .theme-switch-wrapper {
-            position: fixed; top: 30px; left: 30px; z-index: 1000;
-            display: flex; align-items: center;
-        }
-        .theme-switch { display: inline-block; height: 34px; position: relative; width: 70px; }
-        .theme-switch input { display:none; }
-        .slider {
-            background-color: var(--nav-bg); bottom: 0; cursor: pointer; left: 0;
-            position: absolute; right: 0; top: 0; transition: .4s;
-            border-radius: 34px; border: 2px solid var(--point-color);
-            box-shadow: 0 5px 10px var(--shadow-color);
-        }
-        .slider:before {
-            background-color: var(--point-color); bottom: 4px; content: ""; height: 22px;
-            left: 4px; position: absolute; transition: .4s; width: 22px; border-radius: 50%; z-index: 2;
-        }
-        .icon-sun, .icon-moon { position: absolute; top: 50%; transform: translateY(-50%); font-size: 14px; z-index: 1; transition: 0.3s; }
-        .icon-sun { left: 8px; opacity: 1; }
-        .icon-moon { right: 8px; opacity: 0.3; }
-        input:checked + .slider:before { transform: translateX(36px); }
-        input:checked + .slider .icon-sun { opacity: 0.3; }
-        input:checked + .slider .icon-moon { opacity: 1; }
-
         /* 우측 상단 플레이어 */
         #fixed-player {
             position: fixed; top: 30px; right: 30px; z-index: 999;
@@ -123,15 +86,58 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
         .music-text { font-family: 'Paperlogy-8ExtraBold'; font-size: 0.9rem; color: var(--point-color); margin-right: 5px; white-space: nowrap; }
 
-        /* 헤더 */
+        /* --- ✨ 헤더 & 타이틀 (수정됨: 춤추는 폰트) ✨ --- */
         header {
             text-align: center; height: 100vh; display: flex; flex-direction: column;
             justify-content: center; align-items: center; color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
-        header h1 { font-size: 3.5rem; margin-bottom: 20px; min-height: 60px; color: #fff; text-shadow: 3px 3px 0px var(--point-color); }
-        .typing-cursor::after { content: '|'; animation: blink 1s step-start infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            color: #fff;
+            text-shadow: 3px 3px 0px var(--point-color);
+            line-height: 1.4;
+            cursor: default;
+        }
+
+        /* 글자 하나하나에 적용될 스타일 */
+        .hero-title span {
+            display: inline-block;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 통통 튀는 효과 */
+            cursor: pointer;
+        }
+
+        /* ✨ [수정됨] 호버 시 효과 (일반 글자: 조새봄 제외) ✨ */
+        .hero-title span:not(.name-char):hover {
+            transform: translateY(-20px) rotate(10deg) scale(1.2); /* 위로 붕 뜨면서 회전 */
+            color: #ff5e7d; /* ✨ 더 진하고 쨍한 핑크로 변경! */
+            text-shadow: 3px 3px 0px #ffc2d4; /* 그림자는 연한 핑크로 대비를 줌 */
+        }
+
+        /* ✨ '조새봄' 전용 스타일 (수정됨: 간격 삭제 & 테두리 3px & 더 진한 색) ✨ */
+        .name-char {
+            color: #ffe3e8; /* 연한 핑크 채우기 */
+            -webkit-text-stroke: 3px #ff5e7d; /* 더 진한 핑크 테두리! */
+            text-shadow: 3px 3px 0px rgba(255, 94, 125, 0.3); /* 더 진한 그림자 */
+            font-weight: 900; /* 통통하게 */
+            margin: 0; /* 간격 제거해서 다른 글자와 동일하게! */
+            paint-order: stroke fill; /* 테두리가 글자를 갉아먹지 않게 */
+        }
+
+        /* '조새봄' 호버 시 효과 (수정됨: 더 진한 색) */
+        .name-char:hover {
+            color: #ff5e7d !important; /* 더 진한 핑크로 변경! */
+            -webkit-text-stroke: 0px transparent !important; /* 테두리 없애고 */
+            text-shadow: 0 0 15px #ff7e98, 0 0 30px #ff5e7d !important; /* 더 뽀샤시하고 진한 네온 글로우 효과 */
+            transform: translateY(-20px) rotate(-10deg) scale(1.3) !important; /* 반대 방향으로 갸우뚱 */
+        }
+
+        .hero-title .highlight {
+            color: #fff; 
+        }
+
         .scroll-down { margin-top: 50px; font-size: 2rem; animation: bounce 2s infinite; opacity: 0.8; color: #fff; text-shadow: 0 2px 5px var(--point-color); }
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
 
@@ -266,7 +272,7 @@
         }
         .demo-btn.hover { background: var(--point-color); color: white; }
 
-        /* ✨ [수정됨] 타임라인 (정렬 완벽 보정) ✨ */
+        /* 타임라인 */
         .timeline { position: relative; max-width: 800px; margin: 0 auto; }
         .timeline::after {
             content: ''; position: absolute; width: 4px; background-color: white;
@@ -281,7 +287,6 @@
             display: flex; align-items: center; justify-content: center; font-size: 16px;
             top: 20px;
         }
-        /* 👇 딸기 정렬 (아이콘 크기 40px의 절반인 20px만큼 밀어서 중앙 정렬) */
         .left::after { right: -20px; } 
         .right::after { left: -20px; }
 
@@ -315,7 +320,7 @@
         .item-info h4 { font-size: 0.9rem; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-color); }
         .tag-badge { display: inline-block; font-size: 0.7rem; background: #ffeff2; color: var(--point-color); padding: 2px 8px; border-radius: 4px; margin-top: 5px; font-weight: bold; }
 
-        /* ✨ [수정됨] Guild Chat (아이콘 복구 + 정렬) ✨ */
+        /* Guild Chat */
         .chat-box { 
             background: #f1f2f6; 
             padding: 20px; border-radius: 15px; border: 2px solid #e0e0e0; 
@@ -331,13 +336,12 @@
             margin-right: 10px; 
         }
 
-        /* ✨ [핵심] 아이콘 디자인 복구 (흰배경+테두리) ✨ */
         .chat-avatar {
-            width: 50px; height: 50px; /* 크기 적당히 조절 */
+            width: 50px; height: 50px; 
             background: white; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             border: 2px solid var(--point-color); flex-shrink: 0;
-            font-size: 1.5rem; /* 이모지 크기 */
+            font-size: 1.5rem; 
             margin-right: 0; padding-bottom: 0; line-height: 1;
         }
         .chat-bubble {
@@ -443,7 +447,7 @@
             .timeline::after { left: 31px; }
             .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
             .left { text-align: left; } .left::after { left: 15px; } .right { left: 0; }
-            .right-nav, #fixed-player, .theme-switch-wrapper { display: none; } /* 모바일 숨김 */
+            .right-nav, #fixed-player { display: none; } /* 모바일 숨김 */
         }
 
         .floating-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
@@ -484,16 +488,6 @@
         <div class="floater f5">🐰</div>
     </div>
 
-    <div class="theme-switch-wrapper">
-        <label class="theme-switch" for="checkbox">
-            <input type="checkbox" id="checkbox" />
-            <div class="slider round">
-                <i class="fas fa-sun icon-sun" style="color:orange;"></i>
-                <i class="fas fa-moon icon-moon" style="color:yellow;"></i>
-            </div>
-        </label>
-    </div>
-
     <div id="fixed-player">
         <i class="fas fa-compact-disc lp-icon"></i>
         <span class="music-text">Click to Play 🎵</span>
@@ -515,8 +509,13 @@
         <a href="#contact" class="nav-dot" data-label="Contact"></a>
     </div>
 
+    <!-- ✨ [수정됨] 타이틀 부분 ✨ -->
     <header>
-        <h1 class="typing-text typing-cursor"></h1>
+        <h1 class="hero-title">
+            <span>안</span><span>녕</span><span>하</span><span>세</span><span>요</span><span>!</span><br>
+            <span>웹</span> <span>디</span><span>자</span><span>이</span><span>너</span><br>
+            <span class="name-char">조</span><span class="name-char">새</span><span class="name-char">봄</span><span>입</span><span>니</span><span>다</span><span>.</span>
+        </h1>
         <p style="color: #fff; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">
             작업 아카이브를 찾아주셔서 감사합니다 ( --) ( __)
         </p>
@@ -875,17 +874,7 @@
     </footer>
 
     <script>
-        const text = "🍓 Welcome to Saebom's Archive!";
-        const typingElement = document.querySelector(".typing-text");
-        let index = 0;
-
-        function type() {
-            if (index < text.length) {
-                typingElement.textContent += text.charAt(index);
-                index++;
-                setTimeout(type, 100);
-            }
-        }
+        // ✨ (삭제됨) 타이핑 효과 JS 제거하고 CSS hover 효과로 대체함 ✨
 
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
@@ -944,18 +933,6 @@
             }
         });
 
-        // ✨ [수정됨] 테마 스위치 로직 (체크박스 감지) ✨
-        const themeCheckbox = document.getElementById('checkbox');
-        const body = document.body;
-        
-        themeCheckbox.addEventListener('change', () => {
-            if(themeCheckbox.checked) {
-                body.classList.add('dark-mode');
-            } else {
-                body.classList.remove('dark-mode');
-            }
-        });
-
         // ✨ 방명록 기능 ✨
         function addPost() {
             const name = document.getElementById('g-name').value;
@@ -992,7 +969,7 @@
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            type();
+            // type(); // 삭제됨
             window.addEventListener("scroll", function() {
                 reveal();
                 scrollFunction();
