@@ -210,7 +210,15 @@
             font-weight: bold; 
         }
 
-        .scroll-down { margin-top: 50px; font-size: 2rem; animation: bounce 2s infinite; opacity: 0.8; color: #fff; text-shadow: 0 2px 5px var(--point-color); }
+        /* ✨ [수정] 스크롤 다운 화살표 스타일 (그림자 제거, 깔끔한 흰색) ✨ */
+        .scroll-down { 
+            margin-top: 50px; 
+            font-size: 2rem; 
+            animation: bounce 2s infinite; 
+            opacity: 0.8; 
+            color: var(--dark-point); /* ✨ 흰색(#fff)에서 진한 핑크로 변경! ✨ */
+            text-shadow: none; /* 그림자/테두리 효과 제거 */
+        }
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
 
         /* 컨텐츠 */
@@ -340,17 +348,55 @@
         .company { font-size: 0.9rem; color: #888; display: block; margin-bottom: 5px; }
 
         /* 갤러리 */
-        .category-group { margin-bottom: 80px; }
+        .category-group { margin-bottom: 30px; } /* ✨ 간격 조정: 펼쳐질 때 너무 멀지 않게 */
+        
+        /* ✨ [수정] 카테고리 헤더 토글 스타일 추가 ✨ */
         .category-header { 
             font-size: 1.5rem; color: var(--point-color); 
-            margin-bottom: 20px; border-left: 6px solid var(--point-color);
-            padding-left: 15px; display: flex; align-items: center; gap: 10px; background: var(--nav-bg); border-radius: 0 10px 10px 0; padding: 10px 15px;
+            margin-bottom: 0; /* 접혀있을 때 여백 제거 */
+            border-left: 6px solid var(--point-color);
+            padding-left: 15px; display: flex; align-items: center; justify-content: space-between; /* 아이콘 우측 정렬 */
+            gap: 10px; background: var(--nav-bg); 
+            border-radius: 0 10px 10px 0; padding: 15px 20px;
+            cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
         }
+        .category-header:hover {
+            background-color: #fff0f5;
+        }
+        
+        /* ✨ 토글 아이콘 (화살표) ✨ */
+        .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        .category-header.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* ✨ 갤러리 래퍼 (접힘/펼침 효과) ✨ */
+        .gallery-wrapper {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out; /* 부드러운 슬라이드 효과 */
+            padding: 0 5px; /* 내부 여백 */
+        }
+        .gallery-wrapper.open {
+            /* JS에서 max-height 계산해서 넣거나 넉넉하게 줌. 
+               transition을 위해 max-height 사용 */
+        }
+
+        /* 갤러리 그리드 */
         .sub-category-header {
             font-size: 1.1rem; color: #8d7b7f; margin: 30px 0 15px 0;
             display: inline-block; background: var(--nav-bg); padding: 5px 15px; border-radius: 20px; font-weight: bold; border: 1px solid var(--point-color);
         }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; } 
+        .gallery-grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; 
+            padding-bottom: 20px; /* 하단 여백 추가 */
+            margin-top: 20px; /* 상단 여백 추가 */
+        } 
+        
         .gallery-item {
             display: block; text-decoration: none; color: inherit; background: var(--nav-bg);
             border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
@@ -477,7 +523,7 @@
             border: 3px solid #ffe3e8; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             transition: 0.3s; cursor: pointer; text-decoration: none; color: inherit;
         }
-        .hobby-card:hover { transform: rotate(10deg) scale(1.1); border-color: var(--point-color); background: #fff0f5; }
+        .hobby-card:hover { transform: rotate(10deg) scale(1.1); border-color: var(--point-color); background: #fff0f5; box-shadow: 0 5px 15px var(--shadow-color); }
         .hobby-icon { font-size: 2.5rem; margin-bottom: 5px; }
         .hobby-name { font-size: 0.9rem; font-weight: bold; color: var(--text-color); }
 
@@ -485,42 +531,111 @@
         .reveal.active { opacity: 1; transform: translateY(0); }
         
         @media screen and (max-width: 768px) {
-            /* ✨ 모바일 폰트 크기 최적화 ✨ */
-            .hero-title { font-size: 3.5rem; }
-            .profile-content { flex-direction: column; text-align: center; }
-            .profile-img-box { width: 200px; height: 200px; margin-bottom: 20px; }
-            .info-list { justify-content: center; }
-            .timeline::after { left: 31px; }
-            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; }
-            .left { text-align: left; } .left::after { left: 15px; } .right { left: 0; }
-            .right-nav, #fixed-player { display: none; } /* 모바일 숨김 */
+            /* ✨ 1. 기본 폰트 사이즈 축소 (본문 전체 적용) ✨ */
+            html {
+                font-size: 13px; /* 기본 16px -> 13px로 줄여서 전체 비율 축소 */
+            }
 
-            /* ✨ 모바일에서 버튼 세로 정렬 및 박스 수정 ✨ */
+            /* ✨ 2. 헤더 미니 디자인 시스템: 좌측 하단 & 작게 ✨ */
+            .mini-design-system {
+                bottom: 30px; 
+                left: 20px;   /* 왼쪽으로 붙이기 */
+                transform: none; /* 가운데 정렬 해제 */
+                align-items: flex-start; /* 왼쪽 정렬 */
+                gap: 3px;
+            }
+            .mini-circle {
+                width: 18px; /* 컬러칩 크기 더 작게 */
+                height: 18px;
+            }
+            .mini-font {
+                font-size: 0.7rem; /* 텍스트 크기 축소 */
+                margin-left: 1px;
+            }
+
+            /* ✨ 3. 타이틀 폰트 크기 및 모바일 레이아웃 최적화 ✨ */
+            .hero-title { font-size: 3.5rem; } /* 타이틀은 유지하되 모바일에 맞게 */
+            .hero-desc { font-size: 0.95rem; margin-top: 15px; }
+
+            /* 프로필 섹션 축소 */
+            .profile-content { flex-direction: column; text-align: center; gap: 20px; }
+            .profile-card { padding: 25px 20px; } /* 박스 여백 줄임 */
+            .profile-img-box { width: 160px; height: 160px; margin-bottom: 15px; border-width: 4px; }
+            .profile-info h3 { font-size: 1.8rem; margin-bottom: 5px; }
+            .info-list { justify-content: center; gap: 5px; }
+            .info-list li { padding: 4px 10px; font-size: 0.85rem; }
+
+            /* ✨ [수정] Vitamin & Bug Report 모바일 최적화 (아이콘 우측 배치) ✨ */
+            .feedback-card {
+                padding: 20px; /* 패딩 조금 줄임 */
+                text-align: left; /* 텍스트 왼쪽 정렬 */
+            }
+            .fb-icon {
+                position: absolute; /* 절대 위치로 띄움 */
+                top: 20px;
+                right: 20px;
+                margin-bottom: 0;
+                font-size: 1.5rem; /* 아이콘 크기 살짝 축소 */
+            }
+            .fb-title {
+                margin-top: 0;
+                margin-bottom: 15px;
+                font-size: 1.1rem; /* 제목 크기 조정 */
+                padding-right: 30px; /* 아이콘 겹침 방지 */
+            }
+
+            /* 타임라인 (My Journey) 축소 */
+            .timeline::after { left: 20px; } /* 선 위치를 왼쪽으로 이동 */
+            
+            /* 아이템 너비 100%로 하고, 좌우 배치 속성(left: 50%) 초기화 */
+            .timeline-item { width: 100%; padding-left: 50px; padding-right: 10px; margin-bottom: 20px; }
+            
+            /* ★ 핵심 수정: .right 클래스가 가진 PC 속성(left: 50%)을 모바일에서 0으로 덮어쓰기 */
+            .left, .right { left: 0 !important; text-align: left; } 
+            
+            /* 딸기 아이콘 위치도 왼쪽으로 통일 */
+            .left::after, .right::after { left: 4px; right: auto; } 
+            
+            .timeline-item::after { width: 32px; height: 32px; font-size: 12px; top: 15px; } /* 딸기 아이콘 작게 */
+            .content { padding: 15px; } /* 내용 박스 여백 축소 */
+
+            /* 섹션 간격 및 타이틀 축소 */
+            section { margin-bottom: 80px; }
+            .section-title { font-size: 1.5rem; padding: 5px 25px; margin-bottom: 30px; }
+
+            /* ✨ 4. Works 갤러리: 한 줄에 2개씩 뜨게 수정 ✨ */
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2열 강제 지정 */
+                gap: 10px; /* 간격 좁히기 */
+            }
+            .thumb-box { height: 100px; font-size: 1.5rem; } /* 썸네일 높이 축소 */
+            .item-info { padding: 10px; }
+            .item-info h4 { font-size: 0.85rem; }
+            
+            /* 스킬 박스 축소 */
+            .skill-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+            .skill-item { padding: 10px; }
+            .skill-icon { font-size: 1.5rem; }
+            .skill-name { font-size: 0.8rem; }
+
+            /* 컨택트 박스 & 버튼 수정 */
             .contact-links {
-                flex-direction: column; /* 세로로 쌓기 */
-                gap: 15px;
+                flex-direction: column; 
+                gap: 10px;
             }
             .contact-btn {
-                width: 100%; /* 버튼 너비 꽉 채우기 */
-                justify-content: center; /* 텍스트 가운데 정렬 */
+                width: 100%; 
+                justify-content: center; 
+                padding: 8px; /* 버튼 높이 줄임 */
+                font-size: 0.9rem;
             }
             .contact-box {
-                padding: 60px 20px 30px 20px; /* 패딩 좀 줄여서 공간 확보 */
+                padding: 50px 20px 25px 20px; /* 전체 박스 크기 줄임 */
             }
+            .contact-box::before { font-size: 2.5rem; top: -35px; } /* 💌 아이콘 축소 */
             
-            /* ✨ 타이틀 아래 설명 문구 모바일 대응 ✨ */
-            .hero-desc {
-                font-size: 1rem; /* 모바일에서는 다시 작게 */
-                margin-top: 15px;
-            }
-
-            /* ✨ 미니 디자인 시스템 모바일 위치 조정 ✨ */
-            .mini-design-system {
-                bottom: 80px; /* 스크롤 다운 화살표랑 안 겹치게 위로 올림 */
-                left: 50%;
-                transform: translateX(-50%); /* 가운데 정렬 */
-                align-items: center;
-            }
+            /* 우측 내비, 플레이어 숨김 */
+            .right-nav, #fixed-player { display: none; } 
         }
 
         .floating-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
@@ -609,7 +724,8 @@
             <span class="mini-font">Paperlogy</span>
         </div>
 
-        <div class="scroll-down">👇</div>
+        <!-- ✨ [수정] 이모지 대신 깔끔한 아이콘으로 교체 ✨ -->
+        <div class="scroll-down"><i class="fas fa-chevron-down"></i></div>
     </header>
 
     <div class="container">
@@ -731,96 +847,104 @@
             </div>
         </section>
 
+        <!-- ✨ [수정] 갤러리 섹션: 토글 기능 적용 ✨ -->
         <section id="works" class="reveal">
             <h2 class="section-title">📂 Works Gallery</h2>
             
             <div class="category-group">
-                <h3 class="category-header">🏢 (주)아이엔에프아이엑스</h3>
-                <div class="gallery-grid">
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 01</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 02</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 03</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 04</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 05</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 06</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 07</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 08</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 09</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 10</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 11</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 12</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 13</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 14</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 15</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 16</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 17</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 18</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 19</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 20</h4></div></a>
+                <h3 class="category-header">🏢 (주)아이엔에프아이엑스 <i class="fas fa-chevron-down toggle-icon"></i></h3>
+                <div class="gallery-wrapper">
+                    <div class="gallery-grid">
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 01</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 02</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 03</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 04</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 05</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 06</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 07</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 08</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 09</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 10</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 11</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 12</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 13</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 14</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 15</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 16</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 17</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 18</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 19</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">💻</div><div class="item-info"><h4>INFIX 프로젝트 20</h4></div></a>
+                    </div>
                 </div>
             </div>
 
             <div class="category-group">
-                <h3 class="category-header">👗 (주)제이스타일</h3>
-                
-                <span class="sub-category-header">🇯🇵 Japan</span>
-                <div class="gallery-grid">
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 01</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 02</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 03</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 04</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 05</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 06</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 07</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 08</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 09</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 10</h4></div></a>
-                </div>
+                <h3 class="category-header">👗 (주)제이스타일 <i class="fas fa-chevron-down toggle-icon"></i></h3>
+                <div class="gallery-wrapper">
+                    <span class="sub-category-header">🇯🇵 Japan</span>
+                    <div class="gallery-grid">
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 01</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 02</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 03</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 04</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 05</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 06</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 07</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 08</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 09</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👘</div><div class="item-info"><h4>JP Promo 10</h4></div></a>
+                    </div>
 
-                <span class="sub-category-header">🇰🇷 Korea</span>
-                <div class="gallery-grid">
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 01</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 02</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 03</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 04</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 05</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 06</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 07</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 08</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 09</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 10</h4></div></a>
-                </div>
+                    <span class="sub-category-header">🇰🇷 Korea</span>
+                    <div class="gallery-grid">
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 01</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 02</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 03</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 04</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 05</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 06</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 07</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 08</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 09</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👚</div><div class="item-info"><h4>KR Detail 10</h4></div></a>
+                    </div>
 
-                <span class="sub-category-header">🇺🇸 USA / Global (EN)</span>
-                <div class="gallery-grid">
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 01</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 02</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 03</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 04</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 05</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 06</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 07</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 08</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 09</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 10</h4></div></a>
-                </div>
-            </div>
-
-            <div class="category-group">
-                <h3 class="category-header">🎀 (주)마리앙</h3>
-                <div class="gallery-grid">
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👠</div><div class="item-info"><h4>작업명 01</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👠</div><div class="item-info"><h4>작업명 02</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👠</div><div class="item-info"><h4>작업명 03</h4></div></a>
+                    <span class="sub-category-header">🇺🇸 USA / Global (EN)</span>
+                    <div class="gallery-grid">
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 01</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 02</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 03</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 04</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 05</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 06</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 07</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 08</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 09</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👖</div><div class="item-info"><h4>EN Campaign 10</h4></div></a>
+                    </div>
                 </div>
             </div>
 
             <div class="category-group">
-                <h3 class="category-header">🎨 폼폼레시피</h3>
-                <div class="gallery-grid">
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">🖼️</div><div class="item-info"><h4>작업명 01</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">🖼️</div><div class="item-info"><h4>작업명 02</h4></div></a>
-                    <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">🖼️</div><div class="item-info"><h4>작업명 03</h4></div></a>
+                <h3 class="category-header">🎀 (주)마리앙 <i class="fas fa-chevron-down toggle-icon"></i></h3>
+                <div class="gallery-wrapper">
+                    <div class="gallery-grid">
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👠</div><div class="item-info"><h4>작업명 01</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👠</div><div class="item-info"><h4>작업명 02</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">👠</div><div class="item-info"><h4>작업명 03</h4></div></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-group">
+                <h3 class="category-header">🎨 폼폼레시피 <i class="fas fa-chevron-down toggle-icon"></i></h3>
+                <div class="gallery-wrapper">
+                    <div class="gallery-grid">
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">🖼️</div><div class="item-info"><h4>작업명 01</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">🖼️</div><div class="item-info"><h4>작업명 02</h4></div></a>
+                        <a href="#" target="_blank" class="gallery-item"><div class="thumb-box">🖼️</div><div class="item-info"><h4>작업명 03</h4></div></a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1038,6 +1162,28 @@
                 updateNav();
             });
             reveal();
+
+            // ✨ 카테고리 헤더 토글 기능 추가 ✨
+            const categoryHeaders = document.querySelectorAll('.category-header');
+            
+            categoryHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    // 1. 헤더에 active 클래스 토글 (화살표 회전용)
+                    this.classList.toggle('active');
+                    
+                    // 2. 바로 다음 형제 요소인 gallery-wrapper 찾기
+                    const wrapper = this.nextElementSibling;
+                    
+                    if (wrapper) {
+                        // 3. 열려있으면(높이 값이 있으면) 닫고, 닫혀있으면 열기
+                        if (wrapper.style.maxHeight) {
+                            wrapper.style.maxHeight = null;
+                        } else {
+                            wrapper.style.maxHeight = wrapper.scrollHeight + "px";
+                        }
+                    }
+                });
+            });
         });
     </script>
 </body>
