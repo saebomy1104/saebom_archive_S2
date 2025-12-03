@@ -24,7 +24,7 @@
             /* [Day Mode] */
             --bg-grad-1: #ffb0c9; 
             --bg-grad-2: #ffd1dc; 
-            --bg-grad-3: #fffdf2;     
+            --bg-grad-3: #fffdf2;      
             --point-color: #ff7e98; 
             --dark-point: #ff5e7d; /* 진한 핑크 */
             --shadow-color: rgba(255, 126, 152, 0.3); 
@@ -37,8 +37,8 @@
         /* [Night Mode] */
         body.dark-mode {
             --bg-grad-1: #2d1b2e;        
-            --bg-grad-2: #462b35;     
-            --bg-grad-3: #1a1a1a;     
+            --bg-grad-2: #462b35;      
+            --bg-grad-3: #1a1a1a;      
             --point-color: #ff9fb6; 
             --dark-point: #ff9fb6;
             --shadow-color: rgba(0, 0, 0, 0.5); 
@@ -142,19 +142,19 @@
             text-shadow: 3px 3px 0px #ffc2d4; 
         }
 
+        /* --- ✨ [수정] 이름 글자 스타일 ✨ --- */
         .name-char {
-            color: #ffe3e8; 
-            -webkit-text-stroke: 3px #ff5e7d; 
-            text-shadow: 3px 3px 0px rgba(255, 94, 125, 0.3); 
+            color: #ff5e7d; /* 진한 핑크로 변경 */
+            -webkit-text-stroke: 2px #fff; /* 흰색 테두리를 줘서 깔끔하게! */
+            text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1); 
             font-weight: 900; 
             margin: 0; 
             paint-order: stroke fill; 
         }
 
+        /* --- ✨ [수정] 호버 시 네온효과 제거, 모션만 유지 ✨ --- */
         .name-char:hover {
-            color: #ff5e7d !important; 
-            -webkit-text-stroke: 0px transparent !important; 
-            text-shadow: 0 0 15px #ff7e98, 0 0 30px #ff5e7d !important; 
+            /* 네온 효과(text-shadow) 삭제됨 */
             transform: translateY(-20px) rotate(-10deg) scale(1.3) !important; 
         }
 
@@ -588,9 +588,9 @@
     <!-- ✨ 타이틀 부분 ✨ -->
     <header>
         <h1 class="hero-title">
-            <span>안</span><span>녕</span><span>하</span><span>세</span><span>요</span><span>!</span><br>
-            <span>웹</span> <span>디</span><span>자</span><span>이</span><span>너</span><br>
-            <span class="name-char">조</span><span class="name-char">새</span><span class="name-char">봄</span><span>입</span><span>니</span><span>다</span><span>.</span>
+            <span>안</span><span>녕</span><span>하</span><span>세</span><span>요</span><br>
+            <span>U</span><span>X</span><span>U</span><span>I</span><span>디</span><span>자</span><span>이</span><span>너</span><br>
+            <span class="name-char">조</span><span class="name-char">새</span><span class="name-char">봄</span><span>입</span><span>니</span><span>다</span>
         </h1>
         <p class="hero-desc">
             아카이브를 찾아주셔서 감사합니다 ( --) ( __)
@@ -1042,4 +1042,3 @@
     </script>
 </body>
 </html>
-
